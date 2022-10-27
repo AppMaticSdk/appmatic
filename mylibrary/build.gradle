@@ -1,0 +1,96 @@
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+    id 'signing'
+}
+//group = "io.github"
+//archivesBaseName = "appnetlink"
+//version = "1.0.5"
+publishing {
+    publications {
+        mavenJava (MavenPublication) {
+            afterEvaluate {
+                groupId = "io.github"
+                artifactId = "NetlinkSDK"
+                version = "2.0.0"
+                from components.release
+                pom{
+                    name = 'nexus'
+                    packaging = 'aar'
+                    description =  'Netlink SDK'
+                    url = 'https://github.com/NetlinkSDK/android-sdk'
+                    scm {
+                        connection = 'scm:git:ssh://github.com/NetlinkSDK/android-sdk.git'
+                        developerConnection = 'scm:git:ssh://github.com/NetlinkSDK/android-sdk.git'
+                        url = 'https://github.com/NetlinkSDK/android-sdk'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            name = 'Netlink'
+                            email = 'app@netlink.vn'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = project.findProperty("gpr.ossrhUsername") ?: ('fmyUFyi5')
+                password = project.findProperty("gpr.ossrhPassword") ?: ('LmAeFr+6W/7rX1mYSy+Z9V6wARjcEukHNdVjZEe9KAMF')
+            }
+        }
+
+    }
+}
+signing {
+    sign publishing.publications.mavenJava
+    sign configurations.archives
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 32
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'com.google.ads.mediation:fyber:8.2.0.0'
+    // applovin
+    implementation 'com.google.ads.mediation:applovin:11.5.3.0'
+    //iron
+    implementation 'com.google.ads.mediation:ironsource:7.2.3.1.0'
+    //unity ads
+    implementation 'com.unity3d.ads:unity-ads:4.4.0'
+    implementation 'com.google.ads.mediation:unity:4.4.1.0'
+    //vungle
+    implementation 'com.google.ads.mediation:vungle:6.12.0.0'
+    //meta
+//    implementation 'com.google.ads.mediation:facebook:6.11.0.1'
+    //ad falcon, flurry, leadbolt, LG U+ad, mobFox, tencent, vpon, zuck
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}

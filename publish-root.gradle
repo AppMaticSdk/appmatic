@@ -1,0 +1,16 @@
+// Create variables with empty default values
+ext["signing.keyId"] = 'C7AED43C'
+ext["signing.password"] = 'dungcvfrz11'
+ext["signing.key"] = 'C:\\Users\\Mr. Dung\\AppData\\Roaming\\gnupg\\pubring.kbx'
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+ext["sonatypeStagingProfileId"] = ''
+nexusPublishing {
+    repositories {
+        sonatype {
+            stagingProfileId = sonatypeStagingProfileId
+            username = ossrhUsername
+            password = ossrhPassword
+        }
+    }
+}

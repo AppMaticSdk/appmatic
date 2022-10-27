@@ -1,0 +1,78 @@
+plugins {
+    id 'java-library'
+    id 'signing'
+    id 'maven-publish'
+}
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+artifacts {
+    archives javadocJar, sourcesJar
+}
+group = "io.github"
+archivesBaseName = "appnetlink"
+version = "1.0.5"
+publishing {
+    publications {
+        mavenJava (MavenPublication) {
+            afterEvaluate {
+                groupId = "io.github"
+                artifactId = "appnetlink"
+                version = "1.2.0"
+                from components.java
+                pom{
+                    name = 'nexus'
+                    packaging = 'aar'
+                    description =  'Netlink SDK'
+                    url = 'https://github.com/NetlinkSDK/android-sdk'
+                    scm {
+                        connection = 'scm:git:ssh://github.com/NetlinkSDK/android-sdk.git'
+                        developerConnection = 'scm:git:ssh://github.com/NetlinkSDK/android-sdk.git'
+                        url = 'https://github.com/NetlinkSDK/android-sdk'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            name = 'Netlink'
+                            email = 'app@netlink.vn'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = project.findProperty("gpr.ossrhUsername") ?: ('fmyUFyi5')
+                password = project.findProperty("gpr.ossrhPassword") ?: ('LmAeFr+6W/7rX1mYSy+Z9V6wARjcEukHNdVjZEe9KAMF')
+            }
+        }
+    }
+}
+signing {
+    sign publishing.publications.mavenJava
+    sign configurations.archives
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+dependencies {
+
+}
